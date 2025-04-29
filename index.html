@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WealthPlan - Your Financial Planning Partner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            light: '#4f46e5',
+                            dark: '#8b5cf6',
+                        },
+                        secondary: {
+                            light: '#10b981',
+                            dark: '#34d399',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+            (function () {
+                // https://dashboard.emailjs.com/admin/account
+                emailjs.init({
+                    publicKey: "Owgc6JLIZUIQLLJLV",
+                });
+            })();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            /* Ensures the header stays above other elements */
+        }
+
+        body {
+            padding-top: 80px;
+            /* Adjust this value based on the height of your header */
+        }
+
+        .logo-text {
+            background: linear-gradient(90deg, #4f46e5, #10b981);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+
+        .dark .logo-text {
+            background: linear-gradient(90deg, #8b5cf6, #34d399);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .calculator-card {
+            transition: all 0.3s ease;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .calculator-card:hover {
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.05);
+        }
+
+        .theme-btn {
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .tab-active {
+            border-bottom: 3px solid #4f46e5;
+            font-weight: 600;
+        }
+
+        .dark .tab-active {
+            border-bottom: 3px solid #8b5cf6;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            background: #e5e7eb;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4f46e5;
+            cursor: pointer;
+        }
+
+        .dark input[type="range"] {
+            background: #4b5563;
+        }
+
+        .dark input[type="range"]::-webkit-slider-thumb {
+            background: #8b5cf6;
+        }
+
+        .tab-active {
+            border-bottom: 3px solid #4f46e5;
+            /* Highlight the active tab */
+            font-weight: 600;
+            color: #4f46e5;
+        }
+
+        .dark .tab-active {
+            border-bottom: 3px solid #8b5cf6;
+            color: #8b5cf6;
+        }
+
+        .calculator-tab {
+            transition: all 0.3s ease;
+        }
+
+        .calculator-tab.tab-active {
+            background-color: #4f46e5;
+            /* Highlight background */
+            color: white;
+            /* Text color for active tab */
+            font-weight: bold;
+            border-color: #4f46e5;
+        }
+
+        .dark .calculator-tab.tab-active {
+            background-color: #8b5cf6;
+            /* Highlight background for dark mode */
+            color: white;
+            border-color: #8b5cf6;
+        }
+
+        .space-x-4>*+* {
+            margin-left: 1rem;
+            /* Add spacing between tabs */
+        }
+
+        #mobile-menu {
+            transition: all 0.3s ease;
+        }
+
+        .dark .header-tab.active,
+        .header-tab.active {
+            color: #8b5cf6;
+        }
+
+        .error-message {
+            color: #f87171;
+            /* Tailwind's red-500 */
+            font-size: 0.875rem;
+            /* Tailwind's text-sm */
+            margin-top: 0.25rem;
+            /* Tailwind's mt-1 */
+        }
+
+        .border-red-500 {
+            border-color: #f87171;
+            /* Tailwind's red-500 */
+        }
+
+        .dark .text-center.mt-1 {
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-sm">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-r from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark flex items-center justify-center">
+                    <span class="text-white font-bold text-xl">W</span>
+                </div>
+                <h1 class="text-2xl font-bold"><span class="logo-text">WealthPlan</span></h1>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#calculators" data-tab="calculators"
+                    class="header-tab text-gray-700 dark:text-gray-300 hover:text-primary-light dark:hover:text-primary-dark font-medium">Calculators</a>
+                <a href="#about" data-tab="about"
+                    class="header-tab text-gray-700 dark:text-gray-300 hover:text-primary-light dark:hover:text-primary-dark font-medium">About</a>
+                <a href="#contact" data-tab="contact"
+                    class="header-tab text-gray-700 dark:text-gray-300 hover:text-primary-light dark:hover:text-primary-dark font-medium">Contact</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle"
+                    class="theme-btn p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                    <i class="fas fa-moon dark:hidden"></i>
+                    <i class="fas fa-sun hidden dark:block"></i>
+                </button>
+                <button id="mobile-menu-toggle"
+                    class="md:hidden p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 shadow-md">
+            <nav class="flex flex-col space-y-4 p-4">
+                <a href="#calculators" data-tab="calculators"
+                    class="header-tab text-gray-700 dark:text-gray-300 hover:text-primary-light dark:hover:text-primary-dark font-medium">Calculators</a>
+                <a href="#about" data-tab="about"
+                    class="header-tab text-gray-700 dark:text-gray-300 hover:text-primary-light dark:hover:text-primary-dark font-medium">About</a>
+                <a href="#contact" data-tab="contact"
+                    class="header-tab text-gray-700 dark:text-gray-300 hover:text-primary-light dark:hover:text-primary-dark font-medium">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section
+        class="bg-gradient-to-r from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Plan Your Financial Future</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Empowering Indians with smart financial planning tools
+                to achieve their wealth goals</p>
+            <a href="#calculators"
+                class="inline-block bg-white text-primary-light dark:text-primary-dark px-8 py-3 rounded-full font-semibold hover:bg-opacity-90 transition">Explore
+                Calculators</a>
+        </div>
+    </section>
+
+    <!-- Calculators Section -->
+    <section id="calculators" class="py-16 bg-gray-50 dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">Financial Calculators</h2>
+
+            <div class="mb-8 flex justify-center space-x-4">
+                <button type="button"
+                    class="calculator-tab px-4 py-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600"
+                    data-tab="investment">
+                    Investment
+                </button>
+                <button type="button"
+                    class="calculator-tab px-4 py-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600"
+                    data-tab="loans">
+                    Loans
+                </button>
+                <button type="button"
+                    class="calculator-tab px-4 py-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600"
+                    data-tab="tax">
+                    Tax & Savings
+                </button>
+            </div>
+
+            <!-- Investment Calculators -->
+            <div id="investment-calculators"
+                class="calculator-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- SIP Calculator -->
+                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-rupee-sign text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">SIP Calculator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Calculate returns on your Systematic Investment
+                        Plan (SIP) investments</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Monthly
+                                Investment (₹)</label>
+                            <input type="number"
+                                class="sip-monthly-investment w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="5000" min="500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Investment
+                                Period (years)</label>
+                            <input type="range" class="sip-period w-full" min="1" max="30" value="10">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>30</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="sip-period-value text-primary-light dark:text-primary-dark font-medium">10</span>
+                                years
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Expected
+                                Return (% p.a.)</label>
+                            <input type="range" class="sip-return w-full" min="1" max="30" value="12">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>30</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="sip-return-value text-primary-light dark:text-primary-dark font-medium">12</span>%
+                            </div>
+                        </div>
+                        <button
+                            class="sip-calculate w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
+                    </div>
+                    <div class="sip-results mt-6 hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">SIP Projection</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Invested Amount</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white sip-invested">
+                                    ₹6,00,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Estimated Returns</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white sip-returns">
+                                    ₹5,64,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Value</div>
+                                <div
+                                    class="text-sm font-medium text-right text-primary-light dark:text-primary-dark sip-total">
+                                    ₹11,64,000</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lumpsum Calculator -->
+                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-money-bill-wave text-green-600 dark:text-green-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Lumpsum Calculator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Calculate returns on your one-time lump sum
+                        investment</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Investment
+                                Amount (₹)</label>
+                            <input type="number"
+                                class="lumpsum-amount w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="100000" min="1000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Investment
+                                Period (years)</label>
+                            <input type="range" class="lumpsum-period w-full" min="1" max="30" value="5">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>30</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="lumpsum-period-value text-primary-light dark:text-primary-dark font-medium">5</span>
+                                years
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Expected
+                                Return (% p.a.)</label>
+                            <input type="range" class="lumpsum-return w-full" min="1" max="30" value="10">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>30</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="lumpsum-return-value text-primary-light dark:text-primary-dark font-medium">10</span>%
+                            </div>
+                        </div>
+                        <button
+                            class="lumpsum-calculate w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
+                    </div>
+                    <div class="lumpsum-results mt-6 hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">Lumpsum Projection</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Invested Amount</div>
+                                <div
+                                    class="text-sm font-medium text-right text-gray-800 dark:text-white lumpsum-invested">
+                                    ₹1,00,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Estimated Returns</div>
+                                <div
+                                    class="text-sm font-medium text-right text-gray-800 dark:text-white lumpsum-returns">
+                                    ₹61,051</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Value</div>
+                                <div
+                                    class="text-sm font-medium text-right text-primary-light dark:text-primary-dark lumpsum-total">
+                                    ₹1,61,051</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SWP Calculator -->
+                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-calendar-minus text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">SWP Calculator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Calculate Systematic Withdrawal Plan (SWP) from
+                        your investments</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Investment
+                                Amount (₹)</label>
+                            <input type="number"
+                                class="swp-amount w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="1000000" min="10000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Withdrawal
+                                Period (years)</label>
+                            <input type="range" class="swp-period w-full" min="1" max="30" value="10">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>30</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="swp-period-value text-primary-light dark:text-primary-dark font-medium">10</span>
+                                years
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Expected
+                                Return (% p.a.)</label>
+                            <input type="range" class="swp-return w-full" min="1" max="30" value="8">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>30</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="swp-return-value text-primary-light dark:text-primary-dark font-medium">8</span>%
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Monthly
+                                Withdrawal (₹)</label>
+                            <input type="number"
+                                class="swp-withdrawal w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="10000" min="1000">
+                        </div>
+                        <button
+                            class="swp-calculate w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
+                    </div>
+                    <div class="swp-results mt-6 hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">SWP Projection</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Withdrawals</div>
+                                <div
+                                    class="text-sm font-medium text-right text-gray-800 dark:text-white swp-withdrawals">
+                                    ₹12,00,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Remaining Corpus</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white swp-remaining">
+                                    ₹4,32,194</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Value</div>
+                                <div
+                                    class="text-sm font-medium text-right text-primary-light dark:text-primary-dark swp-total">
+                                    ₹16,32,194</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mutual Fund Returns Calculator -->
+                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-chart-line text-yellow-600 dark:text-yellow-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">MF Returns Calculator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Calculate returns on your mutual fund investments
+                    </p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Investment
+                                Amount (₹)</label>
+                            <input type="number"
+                                class="mf-amount w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="50000" min="1000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Investment
+                                Period (years)</label>
+                            <input type="range" class="mf-period w-full" min="1" max="30" value="7">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>30</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="mf-period-value text-primary-light dark:text-primary-dark font-medium">7</span>
+                                years
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Expected
+                                Return (% p.a.)</label>
+                            <input type="range" class="mf-return w-full" min="1" max="30" value="12">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>30</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="mf-return-value text-primary-light dark:text-primary-dark font-medium">12</span>%
+                            </div>
+                        </div>
+                        <button
+                            class="mf-calculate w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
+                    </div>
+                    <div class="mf-results mt-6 hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">MF Projection</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Invested Amount</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white mf-invested">
+                                    ₹50,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Estimated Returns</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white mf-returns">
+                                    ₹55,241</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Value</div>
+                                <div
+                                    class="text-sm font-medium text-right text-primary-light dark:text-primary-dark mf-total">
+                                    ₹1,05,241</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sukanya Samriddhi Yojana Calculator -->
+                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-pink-100 dark:bg-pink-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-female text-pink-600 dark:text-pink-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">SSY Calculator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Calculate returns on Sukanya Samriddhi Yojana
+                        investments</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Yearly
+                                Investment (₹)</label>
+                            <input type="number"
+                                class="ssy-amount w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="150000" min="250" max="150000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Current
+                                Interest Rate (% p.a.)</label>
+                            <input type="number"
+                                class="ssy-rate w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="8.2" min="1" max="20" step="0.1">
+                        </div>
+                        <button
+                            class="ssy-calculate w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
+                    </div>
+                    <div class="ssy-results mt-6 hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">SSY Projection (21 years)</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Investment</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white ssy-invested">
+                                    ₹31,50,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Estimated Returns</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white ssy-returns">
+                                    ₹40,32,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Maturity Value</div>
+                                <div
+                                    class="text-sm font-medium text-right text-primary-light dark:text-primary-dark ssy-total">
+                                    ₹71,82,000</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PPF Calculator -->
+                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-teal-100 dark:bg-teal-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-piggy-bank text-teal-600 dark:text-teal-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">PPF Calculator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Calculate returns on your Public Provident Fund
+                        (PPF) account</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Yearly
+                                Investment (₹)</label>
+                            <input type="number"
+                                class="ppf-amount w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="150000" min="500" max="150000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Current
+                                Interest Rate (% p.a.)</label>
+                            <input type="number"
+                                class="ppf-rate w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="7.1" min="1" max="20" step="0.1">
+                        </div>
+                        <button
+                            class="ppf-calculate w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
+                    </div>
+                    <div class="ppf-results mt-6 hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">PPF Projection (15 years)</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Investment</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white ppf-invested">
+                                    ₹22,50,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Estimated Returns</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white ppf-returns">
+                                    ₹18,24,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Maturity Value</div>
+                                <div
+                                    class="text-sm font-medium text-right text-primary-light dark:text-primary-dark ppf-total">
+                                    ₹40,74,000</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loans Calculators -->
+            <div id="loans-calculators"
+                class="calculator-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 hidden">
+                <!-- EMI Calculator -->
+                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-calculator text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">EMI Calculator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Calculate Equated Monthly Installment (EMI) for
+                        your loan</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Loan Amount
+                                (₹)</label>
+                            <input type="number"
+                                class="emi-amount w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="500000" min="1000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Loan Tenure
+                                (years)</label>
+                            <input type="range" class="emi-tenure w-full" min="1" max="30" value="5">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>30</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="emi-tenure-value text-primary-light dark:text-primary-dark font-medium">5</span>
+                                years
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Interest Rate
+                                (% p.a.)</label>
+                            <input type="range" class="emi-rate w-full" min="1" max="20" value="9.5">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>20</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="emi-rate-value text-primary-light dark:text-primary-dark font-medium">9.5</span>%
+                            </div>
+                        </div>
+                        <button
+                            class="emi-calculate w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
+                    </div>
+                    <div class="emi-results mt-6 hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">EMI Details</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Monthly EMI</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white emi-monthly">
+                                    ₹10,500</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Interest</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white emi-interest">
+                                    ₹1,30,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Payment</div>
+                                <div
+                                    class="text-sm font-medium text-right text-primary-light dark:text-primary-dark emi-total">
+                                    ₹6,30,000</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Home Loan EMI Calculator -->
+                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-home text-green-600 dark:text-green-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Home Loan EMI</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Calculate EMI for your home loan with detailed
+                        breakup</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Loan Amount
+                                (₹)</label>
+                            <input type="number"
+                                class="home-amount w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="3000000" min="100000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Loan Tenure
+                                (years)</label>
+                            <input type="range" class="home-tenure w-full" min="5" max="30" value="20">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>5</span>
+                                <span>30</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="home-tenure-value text-primary-light dark:text-primary-dark font-medium">20</span>
+                                years
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Interest Rate
+                                (% p.a.)</label>
+                            <input type="range" class="home-rate w-full" min="6" max="15" value="8.5" step="0.1">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>6</span>
+                                <span>15</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="home-rate-value text-primary-light dark:text-primary-dark font-medium">8.5</span>%
+                            </div>
+                        </div>
+                        <button
+                            class="home-calculate w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
+                    </div>
+                    <div class="home-results mt-6 hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">Home Loan Details</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Monthly EMI</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white home-monthly">
+                                    ₹26,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Interest</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white home-interest">
+                                    ₹32,40,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Payment</div>
+                                <div
+                                    class="text-sm font-medium text-right text-primary-light dark:text-primary-dark home-total">
+                                    ₹62,40,000</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FD Calculator -->
+                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-file-invoice-dollar text-yellow-600 dark:text-yellow-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">FD Calculator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Calculate returns on your Fixed Deposit investments
+                    </p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Deposit
+                                Amount (₹)</label>
+                            <input type="number"
+                                class="fd-amount w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="100000" min="1000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tenure
+                                (years)</label>
+                            <input type="range" class="fd-tenure w-full" min="1" max="10" value="3">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>10</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="fd-tenure-value text-primary-light dark:text-primary-dark font-medium">3</span>
+                                years
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Interest Rate
+                                (% p.a.)</label>
+                            <input type="range" class="fd-rate w-full" min="1" max="10" value="6.5" step="0.1">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>10</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="fd-rate-value text-primary-light dark:text-primary-dark font-medium">6.5</span>%
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox"
+                                class="fd-compound rounded border-gray-300 text-primary-light dark:text-primary-dark focus:ring-primary-light dark:focus:ring-primary-dark"
+                                id="fd-compound">
+                            <label for="fd-compound"
+                                class="ml-2 block text-sm text-gray-700 dark:text-gray-300">Compound Interest</label>
+                        </div>
+                        <button
+                            class="fd-calculate w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
+                    </div>
+                    <div class="fd-results mt-6 hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">FD Projection</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Principal Amount</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white fd-principal">
+                                    ₹1,00,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Interest</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white fd-interest">
+                                    ₹19,500</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Maturity Value</div>
+                                <div
+                                    class="text-sm font-medium text-right text-primary-light dark:text-primary-dark fd-total">
+                                    ₹1,19,500</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RD Calculator -->
+                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-coins text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">RD Calculator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Calculate returns on your Recurring Deposit
+                        investments</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Monthly
+                                Deposit (₹)</label>
+                            <input type="number"
+                                class="rd-amount w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="5000" min="100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tenure
+                                (months)</label>
+                            <input type="range" class="rd-tenure w-full" min="6" max="120" value="24">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>6</span>
+                                <span>120</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="rd-tenure-value text-primary-light dark:text-primary-dark font-medium">24</span>
+                                months
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Interest Rate
+                                (% p.a.)</label>
+                            <input type="range" class="rd-rate w-full" min="1" max="10" value="6" step="0.1">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>10</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="rd-rate-value text-primary-light dark:text-primary-dark font-medium">6</span>%
+                            </div>
+                        </div>
+                        <button
+                            class="rd-calculate w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
+                    </div>
+                    <div class="rd-results mt-6 hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">RD Projection</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Investment</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white rd-invested">
+                                    ₹1,20,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Interest</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white rd-interest">
+                                    ₹7,500</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Maturity Value</div>
+                                <div
+                                    class="text-sm font-medium text-right text-primary-light dark:text-primary-dark rd-total">
+                                    ₹1,27,500</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tax & Savings Calculators -->
+            <div id="tax-calculators"
+                class="calculator-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 hidden">
+                <!-- Income Tax Calculator -->
+                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-file-alt text-red-600 dark:text-red-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Income Tax Calculator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Calculate your income tax liability for FY 2026-27
+                    </p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Annual Income
+                                (₹)</label>
+                            <input type="number"
+                                class="tax-income w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="1000000" min="0">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Are you salaried?</label>
+                            <select
+                                class="tax-salaried w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tax
+                                Regime</label>
+                            <select
+                                class="tax-regime w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                <option value="new">New Regime</option>
+                                <option value="old">Old Regime</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Age</label>
+                            <select
+                                class="tax-age w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                <option value="below60">Below 60 years</option>
+                                <option value="60to80">60 to 80 years</option>
+                                <option value="above80">Above 80 years</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Deductions
+                                (₹)</label>
+                            <input type="number"
+                                class="tax-deductions w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="150000" min="0">
+                        </div>
+                        <button
+                            class="tax-calculate w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
+                    </div>
+                    <div class="tax-results mt-6 hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">Tax Liability</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Taxable Income</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white tax-taxable">
+                                    ₹8,50,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Income Tax</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white tax-liability">
+                                    ₹92,500</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Cess (4%)</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white tax-cess">
+                                    ₹3,700</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Tax</div>
+                                <div
+                                    class="text-sm font-medium text-right text-primary-light dark:text-primary-dark tax-total">
+                                    ₹96,200</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EPF Calculator -->
+                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-building text-orange-600 dark:text-orange-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">EPF Calculator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Calculate your Employee Provident Fund (EPF) corpus
+                    </p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Basic Salary
+                                + DA (₹)</label>
+                            <input type="number"
+                                class="epf-salary w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="50000" min="0">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Employee
+                                Contribution (%)</label>
+                            <input type="number"
+                                class="epf-employee w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="12" min="0" max="100" step="0.1">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Employer
+                                Contribution (%)</label>
+                            <input type="number"
+                                class="epf-employer w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="12" min="0" max="100" step="0.1">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Current EPF
+                                Rate (% p.a.)</label>
+                            <input type="number"
+                                class="epf-rate w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="8.15" min="0" max="20" step="0.01">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Years of
+                                Service</label>
+                            <input type="range" class="epf-years w-full" min="1" max="40" value="20">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>40</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="epf-years-value text-primary-light dark:text-primary-dark font-medium">20</span>
+                                years
+                            </div>
+                        </div>
+                        <button
+                            class="epf-calculate w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
+                    </div>
+                    <div class="epf-results mt-6 hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">EPF Projection</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Employee Contribution</div>
+                                <div
+                                    class="text-sm font-medium text-right text-gray-800 dark:text-white epf-employee-total">
+                                    ₹14,40,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Employer Contribution</div>
+                                <div
+                                    class="text-sm font-medium text-right text-gray-800 dark:text-white epf-employer-total">
+                                    ₹14,40,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Interest</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white epf-interest">
+                                    ₹37,00,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Maturity Amount</div>
+                                <div
+                                    class="text-sm font-medium text-right text-primary-light dark:text-primary-dark epf-total">
+                                    ₹65,80,000</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GST Calculator -->
+                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-percentage text-indigo-600 dark:text-indigo-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">GST Calculator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Calculate Goods and Services Tax (GST) for your
+                        purchases</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount
+                                (₹)</label>
+                            <input type="number"
+                                class="gst-amount w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="10000" min="0">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">GST Rate
+                                (%)</label>
+                            <select
+                                class="gst-rate w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                <option value="5">5%</option>
+                                <option value="12">12%</option>
+                                <option value="18" selected>18%</option>
+                                <option value="28">28%</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Calculation
+                                Type</label>
+                            <select
+                                class="gst-type w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                <option value="exclusive">Exclusive of GST</option>
+                                <option value="inclusive">Inclusive of GST</option>
+                            </select>
+                        </div>
+                        <button
+                            class="gst-calculate w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
+                    </div>
+                    <div class="gst-results mt-6 hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">GST Calculation</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Original Amount</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white gst-original">
+                                    ₹10,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">GST Amount</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white gst-tax">₹1,800
+                                </div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Net Amount</div>
+                                <div
+                                    class="text-sm font-medium text-right text-primary-light dark:text-primary-dark gst-total">
+                                    ₹11,800</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-8 text-gray-800 dark:text-white">About WealthPlan</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
+                    WealthPlan is an all-in-one financial planning solution tailored for Indian investors. Our goal is
+                    to make intricate financial computations easy to understand, empowering you to make confident
+                    choices about your finances. Whether you're preparing for retirement, securing your child's future,
+                    or optimizing your tax strategy, our tools deliver precise forecasts to support your financial
+                    aspirations.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                    <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl">
+                        <div
+                            class="w-14 h-14 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-bullseye text-blue-600 dark:text-blue-400 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800 dark:text-white">Our Vision</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            To empower every Indian with financial literacy and tools for wealth creation.
+                        </p>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl">
+                        <div
+                            class="w-14 h-14 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-chart-pie text-green-600 dark:text-green-400 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800 dark:text-white">Our Approach</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            Simple, accurate, and personalized financial planning for all life stages.
+                        </p>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl">
+                        <div
+                            class="w-14 h-14 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-users text-purple-600 dark:text-purple-400 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800 dark:text-white">For Everyone</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            From first-time investors to seasoned financial planners, we've got you covered.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-gray-50 dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">Contact Us</h2>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+                    <div class="md:flex">
+                        <div
+                            class="md:w-1/2 bg-gradient-to-r from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark p-8 text-white">
+                            <h3 class="text-2xl font-bold mb-4">Get in Touch</h3>
+                            <p class="mb-6">Have questions or feedback? We'd love to hear from you!</p>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <i class="fas fa-map-marker-alt mr-4 text-xl"></i>
+                                    <span>F1, Financial District, Hyderabad, India 500032</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-phone-alt mr-4 text-xl"></i>
+                                    <span>+91 98489 12301</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-envelope mr-4 text-xl"></i>
+                                    <span>wealthplantowealth@gmail.com</span>
+                                </div>
+                            </div>
+                            <div class="mt-8 flex space-x-4">
+                                <a href="#"
+                                    class="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center hover:bg-opacity-30 transition">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#"
+                                    class="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center hover:bg-opacity-30 transition">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#"
+                                    class="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center hover:bg-opacity-30 transition">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#"
+                                    class="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center hover:bg-opacity-30 transition">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="md:w-1/2 p-8">
+                            <form>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2"
+                                        for="name">Name</label>
+                                    <input type="text" id="name" placeholder="Enter your name"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2"
+                                        for="email">Email</label>
+                                    <input type="email" id="email" placeholder="Enter your email"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2"
+                                        for="message">Message</label>
+                                    <textarea id="message" rows="4" placeholder="Enter your message"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"></textarea>
+                                </div>
+                                <button type="submit"
+                                    class="w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Send
+                                    Message</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 dark:bg-gray-950 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="md:flex md:justify-between">
+                <div class="mb-8 md:mb-0">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-10 h-10 rounded-full bg-gradient-to-r from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark flex items-center justify-center mr-3">
+                            <span class="text-white font-bold text-xl">W</span>
+                        </div>
+                        <h2 class="text-2xl font-bold"><span class="logo-text">WealthPlan</span></h2>
+                    </div>
+                    <p class="text-gray-400 max-w-xs">Your trusted partner for financial planning and wealth creation.
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Calculators</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-400 hover:text-white transition">SIP Calculator</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition">Lumpsum Calculator</a>
+                            </li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition">SWP Calculator</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition">MF Calculator</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4"></h3>
+                        <ul class="space-y-2">
+                            <!-- <li><a href="#" class="text-gray-400 hover:text-white transition">Blog</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition">FAQs</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a></li> -->
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Company</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#about" class="text-gray-400 hover:text-white transition">About</a></li>
+                            <li><a href="#calculators" class="text-gray-400 hover:text-white transition">Calculators</a>
+                            </li>
+                            <li><a href="#contact" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>© <span id="current-year"></span> WealthPlan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+
+        const headerTabs = document.querySelectorAll('.header-tab');
+
+        // Function to highlight the selected tab
+        function highlightTab(selectedTab) {
+            headerTabs.forEach(tab => {
+                if (tab === selectedTab) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+        }
+
+        // Add click event listeners to all header tabs
+        headerTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                highlightTab(tab);
+            });
+        });
+
+        // Highlight the default tab (e.g., "Calculators") on page load
+        const defaultTab = document.querySelector('.header-tab[data-tab="calculators"]');
+        if (defaultTab) {
+            highlightTab(defaultTab);
+        }
+
+
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentYear = new Date().getFullYear();
+            document.getElementById('current-year').textContent = currentYear;
+
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuLinks = mobileMenu.querySelectorAll('a'); // Select all links inside the mobile menu
+
+            // Toggle mobile menu visibility
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Close mobile menu when a link is clicked
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden'); // Hide the mobile menu
+                });
+            });
+
+
+
+
+
+            const tabs = document.querySelectorAll('.calculator-tab');
+            const sections = document.querySelectorAll('.calculator-section');
+
+            // Function to show the selected section and hide others
+            function showSection(tabName) {
+                sections.forEach(section => {
+                    if (section.id === `${tabName}-calculators`) {
+                        section.classList.remove('hidden');
+                    } else {
+                        section.classList.add('hidden');
+                    }
+                });
+
+                // Update active tab styling
+                tabs.forEach(tab => {
+                    if (tab.dataset.tab === tabName) {
+                        tab.classList.add('tab-active');
+                    } else {
+                        tab.classList.remove('tab-active');
+                    }
+                });
+            }
+
+            function updateRangeValue(sliderClass, valueClass) {
+                const slider = document.querySelector(sliderClass);
+                const valueText = document.querySelector(valueClass);
+
+                slider.addEventListener('input', () => {
+                    valueText.textContent = slider.value;
+                });
+            }
+
+
+            // SIP Period Slider
+            updateRangeValue('.sip-period', '.sip-period-value');
+
+            // SIP Return Slider
+            updateRangeValue('.sip-return', '.sip-return-value');
+
+            // Lumpsum Period Slider
+            updateRangeValue('.lumpsum-period', '.lumpsum-period-value');
+
+            // Lumpsum Return Slider
+            updateRangeValue('.lumpsum-return', '.lumpsum-return-value');
+
+            // SWP Period Slider
+            updateRangeValue('.swp-period', '.swp-period-value');
+
+            // SWP Return Slider
+            updateRangeValue('.swp-return', '.swp-return-value');
+
+            // EMI Tenure Slider
+            updateRangeValue('.emi-tenure', '.emi-tenure-value');
+
+            // EMI Rate Slider
+            updateRangeValue('.emi-rate', '.emi-rate-value');
+
+            // FD Tenure Slider
+            updateRangeValue('.fd-tenure', '.fd-tenure-value');
+
+            // FD Rate Slider
+            updateRangeValue('.fd-rate', '.fd-rate-value');
+
+            // RD Tenure Slider
+            updateRangeValue('.rd-tenure', '.rd-tenure-value');
+
+            // RD Rate Slider
+            updateRangeValue('.rd-rate', '.rd-rate-value');
+
+            // EPF Years Slider
+            updateRangeValue('.epf-years', '.epf-years-value');
+
+            updateRangeValue('.mf-period', '.mf-period-value');
+            updateRangeValue('.mf-return', '.mf-return-value');
+
+            updateRangeValue('.home-tenure', '.home-tenure-value');
+            updateRangeValue('.home-rate', '.home-rate-value');
+
+            // Add click event listeners to tabs
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.dataset.tab;
+                    showSection(tabName);
+                });
+            });
+
+            // By default, show the "Investment Calculators" section
+            showSection('investment');
+        });
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // Apply saved theme on page load
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+
+        document.querySelector('.sip-calculate').addEventListener('click', () => {
+            const monthlyInvestment = parseFloat(document.querySelector('.sip-monthly-investment').value);
+            const period = parseInt(document.querySelector('.sip-period').value);
+            const returnRate = parseFloat(document.querySelector('.sip-return').value) / 100;
+
+            const months = period * 12;
+            const monthlyRate = returnRate / 12;
+
+            const futureValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * (1 + monthlyRate);
+
+            document.querySelector('.sip-invested').textContent = `₹${(monthlyInvestment * months).toLocaleString()}`;
+            document.querySelector('.sip-returns').textContent = `₹${(futureValue - monthlyInvestment * months).toLocaleString()}`;
+            document.querySelector('.sip-total').textContent = `₹${futureValue.toLocaleString()}`;
+            document.querySelector('.sip-results').classList.remove('hidden');
+        });
+
+        document.querySelector('.lumpsum-calculate').addEventListener('click', () => {
+            const investment = parseFloat(document.querySelector('.lumpsum-amount').value);
+            const period = parseInt(document.querySelector('.lumpsum-period').value);
+            const returnRate = parseFloat(document.querySelector('.lumpsum-return').value) / 100;
+
+            const futureValue = investment * Math.pow(1 + returnRate, period);
+
+            document.querySelector('.lumpsum-invested').textContent = `₹${investment.toLocaleString()}`;
+            document.querySelector('.lumpsum-returns').textContent = `₹${(futureValue - investment).toLocaleString()}`;
+            document.querySelector('.lumpsum-total').textContent = `₹${futureValue.toLocaleString()}`;
+            document.querySelector('.lumpsum-results').classList.remove('hidden');
+        });
+
+
+        document.querySelector('.swp-calculate').addEventListener('click', () => {
+            const investment = parseFloat(document.querySelector('.swp-amount').value);
+            const withdrawal = parseFloat(document.querySelector('.swp-withdrawal').value);
+            const period = parseInt(document.querySelector('.swp-period').value);
+            const returnRate = parseFloat(document.querySelector('.swp-return').value) / 100;
+
+            const months = period * 12;
+            const monthlyRate = returnRate / 12;
+
+            let remainingCorpus = investment;
+            let totalWithdrawals = 0;
+
+            for (let i = 0; i < months; i++) {
+                remainingCorpus = remainingCorpus * (1 + monthlyRate) - withdrawal;
+                totalWithdrawals += withdrawal;
+            }
+
+            document.querySelector('.swp-withdrawals').textContent = `₹${totalWithdrawals.toLocaleString()}`;
+            document.querySelector('.swp-remaining').textContent = `₹${Math.max(remainingCorpus, 0).toLocaleString()}`;
+            document.querySelector('.swp-total').textContent = `₹${(totalWithdrawals + Math.max(remainingCorpus, 0)).toLocaleString()}`;
+            document.querySelector('.swp-results').classList.remove('hidden');
+        });
+
+        document.querySelector('.mf-calculate').addEventListener('click', () => {
+            const investmentAmount = parseFloat(document.querySelector('.mf-amount').value);
+            const period = parseInt(document.querySelector('.mf-period').value);
+            const returnRate = parseFloat(document.querySelector('.mf-return').value) / 100;
+
+            const maturityValue = investmentAmount * Math.pow(1 + returnRate, period);
+
+            document.querySelector('.mf-invested').textContent = `₹${investmentAmount.toLocaleString()}`;
+            document.querySelector('.mf-returns').textContent = `₹${(maturityValue - investmentAmount).toLocaleString()}`;
+            document.querySelector('.mf-total').textContent = `₹${maturityValue.toLocaleString()}`;
+            document.querySelector('.mf-results').classList.remove('hidden');
+        });
+
+        document.querySelector('.ppf-calculate').addEventListener('click', () => {
+            const yearlyInvestment = parseFloat(document.querySelector('.ppf-amount').value);
+            const interestRate = parseFloat(document.querySelector('.ppf-rate').value) / 100;
+            const years = 15;
+
+            let totalInvestment = 0;
+            let maturityValue = 0;
+
+            for (let i = 0; i < years; i++) {
+                totalInvestment += yearlyInvestment;
+                maturityValue = (maturityValue + yearlyInvestment) * (1 + interestRate);
+            }
+
+            document.querySelector('.ppf-invested').textContent = `₹${totalInvestment.toLocaleString()}`;
+            document.querySelector('.ppf-returns').textContent = `₹${(maturityValue - totalInvestment).toLocaleString()}`;
+            document.querySelector('.ppf-total').textContent = `₹${maturityValue.toLocaleString()}`;
+            document.querySelector('.ppf-results').classList.remove('hidden');
+        });
+
+        document.querySelector('.ssy-calculate').addEventListener('click', () => {
+            const yearlyInvestment = parseFloat(document.querySelector('.ssy-amount').value);
+            const interestRate = parseFloat(document.querySelector('.ssy-rate').value) / 100;
+            const tenure = 21; // Fixed tenure for SSY is 21 years
+
+            let totalInvestment = 0;
+            let maturityValue = 0;
+
+            for (let i = 0; i < tenure; i++) {
+                totalInvestment += yearlyInvestment;
+                maturityValue = (maturityValue + yearlyInvestment) * (1 + interestRate);
+            }
+
+            document.querySelector('.ssy-invested').textContent = `₹${totalInvestment.toLocaleString()}`;
+            document.querySelector('.ssy-returns').textContent = `₹${(maturityValue - totalInvestment).toLocaleString()}`;
+            document.querySelector('.ssy-total').textContent = `₹${maturityValue.toLocaleString()}`;
+            document.querySelector('.ssy-results').classList.remove('hidden');
+        });
+
+
+
+        document.querySelector('.home-calculate').addEventListener('click', () => {
+            const loanAmount = parseFloat(document.querySelector('.home-amount').value);
+            const tenure = parseInt(document.querySelector('.home-tenure').value) * 12; // Convert years to months
+            const rate = parseFloat(document.querySelector('.home-rate').value) / 100 / 12; // Monthly interest rate
+
+            const emi = (loanAmount * rate * Math.pow(1 + rate, tenure)) / (Math.pow(1 + rate, tenure) - 1);
+            const totalPayment = emi * tenure;
+            const totalInterest = totalPayment - loanAmount;
+
+            document.querySelector('.home-monthly').textContent = `₹${emi.toFixed(2).toLocaleString()}`;
+            document.querySelector('.home-interest').textContent = `₹${totalInterest.toLocaleString()}`;
+            document.querySelector('.home-total').textContent = `₹${totalPayment.toLocaleString()}`;
+            document.querySelector('.home-results').classList.remove('hidden');
+        });
+
+        document.querySelector('.fd-calculate').addEventListener('click', () => {
+            const principal = parseFloat(document.querySelector('.fd-amount').value);
+            const rate = parseFloat(document.querySelector('.fd-rate').value) / 100;
+            const tenure = parseInt(document.querySelector('.fd-tenure').value);
+            const isCompound = document.querySelector('.fd-compound').checked;
+
+            let maturityValue;
+
+            if (isCompound) {
+                maturityValue = principal * Math.pow(1 + rate, tenure);
+            } else {
+                maturityValue = principal + (principal * rate * tenure);
+            }
+
+            document.querySelector('.fd-principal').textContent = `₹${principal.toLocaleString()}`;
+            document.querySelector('.fd-interest').textContent = `₹${(maturityValue - principal).toLocaleString()}`;
+            document.querySelector('.fd-total').textContent = `₹${maturityValue.toLocaleString()}`;
+            document.querySelector('.fd-results').classList.remove('hidden');
+        });
+
+        document.querySelector('.emi-calculate').addEventListener('click', () => {
+            const loanAmount = parseFloat(document.querySelector('.emi-amount').value);
+            const tenure = parseInt(document.querySelector('.emi-tenure').value) * 12; // Convert years to months
+            const rate = parseFloat(document.querySelector('.emi-rate').value) / 100 / 12; // Monthly interest rate
+
+            const emi = (loanAmount * rate * Math.pow(1 + rate, tenure)) / (Math.pow(1 + rate, tenure) - 1);
+            const totalPayment = emi * tenure;
+            const totalInterest = totalPayment - loanAmount;
+
+            document.querySelector('.emi-monthly').textContent = `₹${emi.toFixed(2).toLocaleString()}`;
+            document.querySelector('.emi-interest').textContent = `₹${totalInterest.toLocaleString()}`;
+            document.querySelector('.emi-total').textContent = `₹${totalPayment.toLocaleString()}`;
+            document.querySelector('.emi-results').classList.remove('hidden');
+        });
+
+        document.querySelector('.rd-calculate').addEventListener('click', () => {
+            const monthlyDeposit = parseFloat(document.querySelector('.rd-amount').value);
+            const tenure = parseInt(document.querySelector('.rd-tenure').value); // Tenure in months
+            const rate = parseFloat(document.querySelector('.rd-rate').value) / 100 / 12; // Monthly interest rate
+
+            let maturityValue = 0;
+            let totalInvestment = monthlyDeposit * tenure;
+
+            for (let i = 0; i < tenure; i++) {
+                maturityValue += monthlyDeposit * Math.pow(1 + rate, tenure - i);
+            }
+
+            const totalInterest = maturityValue - totalInvestment;
+
+            document.querySelector('.rd-invested').textContent = `₹${totalInvestment.toLocaleString()}`;
+            document.querySelector('.rd-interest').textContent = `₹${totalInterest.toLocaleString()}`;
+            document.querySelector('.rd-total').textContent = `₹${maturityValue.toLocaleString()}`;
+            document.querySelector('.rd-results').classList.remove('hidden');
+        });
+
+
+        document.querySelector('.gst-calculate').addEventListener('click', () => {
+            const amount = parseFloat(document.querySelector('.gst-amount').value);
+            const gstRate = parseFloat(document.querySelector('.gst-rate').value) / 100;
+            const gstType = document.querySelector('.gst-type').value;
+
+            let gstAmount, totalAmount;
+
+            if (gstType === 'exclusive') {
+                gstAmount = amount * gstRate;
+                totalAmount = amount + gstAmount;
+            } else if (gstType === 'inclusive') {
+                gstAmount = amount - (amount / (1 + gstRate));
+                totalAmount = amount;
+            }
+
+            document.querySelector('.gst-original').textContent = `₹${amount.toLocaleString()}`;
+            document.querySelector('.gst-tax').textContent = `₹${gstAmount.toFixed(2).toLocaleString()}`;
+            document.querySelector('.gst-total').textContent = `₹${totalAmount.toFixed(2).toLocaleString()}`;
+            document.querySelector('.gst-results').classList.remove('hidden');
+        });
+
+        document.querySelector('.epf-calculate').addEventListener('click', () => {
+            const basicSalary = parseFloat(document.querySelector('.epf-salary').value);
+            const employeeContributionRate = parseFloat(document.querySelector('.epf-employee').value) / 100;
+            const employerContributionRate = parseFloat(document.querySelector('.epf-employer').value) / 100;
+            const epfRate = parseFloat(document.querySelector('.epf-rate').value) / 100;
+            const years = parseInt(document.querySelector('.epf-years').value);
+
+            let totalEmployeeContribution = 0;
+            let totalEmployerContribution = 0;
+            let maturityAmount = 0;
+
+            for (let i = 0; i < years; i++) {
+                const yearlyEmployeeContribution = basicSalary * 12 * employeeContributionRate;
+                const yearlyEmployerContribution = basicSalary * 12 * employerContributionRate;
+
+                totalEmployeeContribution += yearlyEmployeeContribution;
+                totalEmployerContribution += yearlyEmployerContribution;
+
+                maturityAmount = (maturityAmount + yearlyEmployeeContribution + yearlyEmployerContribution) * (1 + epfRate);
+            }
+
+            const totalInterest = maturityAmount - (totalEmployeeContribution + totalEmployerContribution);
+
+            document.querySelector('.epf-employee-total').textContent = `₹${totalEmployeeContribution.toLocaleString()}`;
+            document.querySelector('.epf-employer-total').textContent = `₹${totalEmployerContribution.toLocaleString()}`;
+            document.querySelector('.epf-interest').textContent = `₹${totalInterest.toLocaleString()}`;
+            document.querySelector('.epf-total').textContent = `₹${maturityAmount.toLocaleString()}`;
+            document.querySelector('.epf-results').classList.remove('hidden');
+        });
+
+        document.querySelector('.tax-calculate').addEventListener('click', () => {
+            const annualIncome = parseFloat(document.querySelector('.tax-income').value);
+            const deductions = parseFloat(document.querySelector('.tax-deductions').value);
+            const regime = document.querySelector('.tax-regime').value; // Old or New regime
+            const isSalaried = document.querySelector('.tax-salaried').value; // Checkbox for salaried individuals
+
+            // Calculate taxable income (only for old regime)
+            const taxableIncome = regime === 'old' ? annualIncome - deductions : annualIncome;
+
+            // Calculate tax
+            const totalTax = calculateIncomeTax(taxableIncome, regime, isSalaried);
+
+            // Update the results in the UI
+            // Calculate cess (4% of tax)
+            const cess = totalTax * 0.04;
+
+            // Update the Income Tax and Cess in the UI
+            document.querySelector('.tax-liability').textContent = `₹${(totalTax - cess).toLocaleString()}`;
+            document.querySelector('.tax-cess').textContent = `₹${cess.toLocaleString()}`;
+            //document.querySelector('.tax-deductions').textContent = `₹${deductions.toLocaleString()}`;
+            // document.querySelector('.tax-regime').textContent = regime === 'old' ? 'Old Regime' : 'New Regime';
+            document.querySelector('.tax-taxable').textContent = `₹${taxableIncome.toLocaleString()}`;
+            document.querySelector('.tax-total').textContent = `₹${totalTax.toLocaleString()}`;
+            document.querySelector('.tax-results').classList.remove('hidden');
+        });
+
+        function calculateIncomeTax(income, regime = 'new', isSalaried = false) {
+            if (income <= 0) return 0;
+
+            const cessRate = 0.04; // 4% Health & Education Cess
+            let tax = 0;
+
+            if (regime === 'old') {
+                // OLD REGIME SLABS
+                const slabs = [
+                    { limit: 250000, rate: 0 },
+                    { limit: 500000, rate: 0.05 },
+                    { limit: 1000000, rate: 0.2 },
+                    { limit: Infinity, rate: 0.3 },
+                ];
+
+                let previousLimit = 0;
+                for (const slab of slabs) {
+                    if (income > slab.limit) {
+                        tax += (slab.limit - previousLimit) * slab.rate;
+                        previousLimit = slab.limit;
+                    } else {
+                        tax += (income - previousLimit) * slab.rate;
+                        break;
+                    }
+                }
+
+                // Rebate under 87A for income up to ₹5 lakh
+                if (income <= 500000) {
+                    tax = 0;
+                }
+            } else if (regime === 'new') {
+                // NEW REGIME SLABS (Post Budget 2025)
+                const slabs = [
+                    { limit: 400000, rate: 0 },
+                    { limit: 800000, rate: 0.05 },
+                    { limit: 1200000, rate: 0.10 },
+                    { limit: 1600000, rate: 0.15 },
+                    { limit: 2000000, rate: 0.20 },
+                    { limit: 2500000, rate: 0.25 },
+                    { limit: Infinity, rate: 0.30 },
+                ];
+
+                let taxableIncome = income;
+
+                // Apply standard deduction of ₹75,000 for salaried individuals
+                if (isSalaried == 'true') {
+                    taxableIncome = Math.max(0, taxableIncome - 75000);
+                }
+
+                let previousLimit = 0;
+                for (const slab of slabs) {
+                    if (taxableIncome > slab.limit) {
+                        tax += (slab.limit - previousLimit) * slab.rate;
+                        previousLimit = slab.limit;
+                    } else {
+                        tax += (taxableIncome - previousLimit) * slab.rate;
+                        break;
+                    }
+                }
+
+                // Rebate under 87A for taxable income up to ₹12 lakh
+                if (taxableIncome <= 1200000) {
+                    tax = 0;
+                }
+            } else {
+                throw new Error("Invalid tax regime selected. Choose 'old' or 'new'.");
+            }
+
+            // Add 4% cess
+            const cess = tax * cessRate;
+            const totalTax = tax + cess;
+
+            return Math.round(totalTax);
+        }
+
+
+        document.querySelector('form').addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent form submission
+
+            // Get form fields
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            // Validation flags
+            let isValid = true;
+
+            // Validate Name
+            if (name === '') {
+                showError('name', 'Name is required.');
+                isValid = false;
+            } else if (name.length < 3) {
+                showError('name', 'Name must be at least 3 characters long.');
+                isValid = false;
+            } else {
+                clearError('name');
+            }
+
+            // Validate Email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email === '') {
+                showError('email', 'Email is required.');
+                isValid = false;
+            } else if (!emailRegex.test(email)) {
+                showError('email', 'Please enter a valid email address.');
+                isValid = false;
+            } else {
+                clearError('email');
+            }
+
+            // Validate Message
+            if (message === '') {
+                showError('message', 'Message is required.');
+                isValid = false;
+            } else if (message.length < 10) {
+                showError('message', 'Message must be at least 10 characters long.');
+                isValid = false;
+            } else {
+                clearError('message');
+            }
+
+            // If all fields are valid, send the email
+            if (isValid) {
+                emailjs.send('service_n9zaflk', 'template_cmyp00i', {
+                    name: name,
+                    email: email,
+                    message: message,
+                }).then(() => {
+                    // Show success popup
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Message Sent!',
+                        text: 'Your message has been sent successfully.',
+                        confirmButtonColor: '#4f46e5',
+                    });
+                    document.querySelector('form').reset(); // Reset the form
+                }).catch((error) => {
+                    // Show error popup
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops!',
+                        text: 'Failed to send the message. Please try again later.',
+                        confirmButtonColor: '#e11d48',
+                    });
+                    console.error('EmailJS Error:', error);
+                });
+            }
+        });
+
+        // Function to show error message
+        function showError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorElement = field.nextElementSibling;
+
+            if (errorElement && errorElement.classList.contains('error-message')) {
+                errorElement.textContent = message;
+            } else {
+                const error = document.createElement('div');
+                error.className = 'error-message text-red-500 text-sm mt-1';
+                error.textContent = message;
+                field.parentNode.appendChild(error);
+            }
+
+            field.classList.add('border-red-500');
+        }
+
+        // Function to clear error message
+        function clearError(fieldId) {
+            const field = document.getElementById(fieldId);
+            const errorElement = field.nextElementSibling;
+
+            if (errorElement && errorElement.classList.contains('error-message')) {
+                errorElement.remove();
+            }
+
+            field.classList.remove('border-red-500');
+        }
+    </script>
+
+
+
+</body>
+
+</html>
