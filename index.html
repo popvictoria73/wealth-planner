@@ -336,6 +336,182 @@
                     </div>
                 </div>
 
+                <!-- Mutual Fund Returns Calculator -->
+                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-chart-line text-yellow-600 dark:text-yellow-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">MF Returns Calculator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Calculate returns on your mutual fund investments
+                    </p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Investment
+                                Amount (₹)</label>
+                            <input type="number"
+                                class="mf-amount w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                value="50000" min="1000">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Investment
+                                Period (years)</label>
+                            <input type="range" class="mf-period w-full" min="1" max="30" value="7">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>30</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="mf-period-value text-primary-light dark:text-primary-dark font-medium">7</span>
+                                years
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Expected
+                                Return (% p.a.)</label>
+                            <input type="range" class="mf-return w-full" min="1" max="30" value="12">
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                <span>1</span>
+                                <span>30</span>
+                            </div>
+                            <div class="text-center mt-1">
+                                <span
+                                    class="mf-return-value text-primary-light dark:text-primary-dark font-medium">12</span>%
+                            </div>
+                        </div>
+                        <button
+                            class="mf-calculate w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
+                    </div>
+                    <div class="mf-results mt-6 hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">MF Projection</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Invested Amount</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white mf-invested">
+                                    ₹50,000</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Estimated Returns</div>
+                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white mf-returns">
+                                    ₹55,241</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Value</div>
+                                <div
+                                    class="text-sm font-medium text-right text-primary-light dark:text-primary-dark mf-total">
+                                    ₹1,05,241</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Retirement Calculator -->
+                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-user-clock text-indigo-600 dark:text-indigo-400"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Retirement Calculator</h3>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Plan your retirement and project your financial
+                        future.</p>
+                    <div class="space-y-4">
+                        <!-- Input Fields -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Current
+                                Age</label>
+                            <input type="number" id="current-age"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
+                                value="35" min="1" max="100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Retirement
+                                Age</label>
+                            <input type="number" value="60" min="2" max="100" id="retirement-age"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Longevity Age
+                                (lifespan)</label>
+                            <input type="number" value="80" min="2" max="150" id="longevity-age"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Current
+                                Savings</label>
+                            <input value="100000" min="1" type="number" id="current-savings"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Monthly
+                                Contribution</label>
+                            <input type="number" value="200" min="1" id="monthly-contribution"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Annual
+                                Income</label>
+                            <input type="number" value="20000" min="1" id="annual-income"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Retirement
+                                Income (%)</label>
+                            <input type="number" value="50" min="1" max="100" id="retirement-income-percentage"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Expected
+                                Return (%)</label>
+                            <input type="number" value="7" min="1" max="500" id="expected-return"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Inflation
+                                Rate (%)</label>
+                            <input type="number" value="3" min="1" max="100" id="inflation-rate"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white">
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" checked="true" id="include-inflation" class="mr-2">
+                            <label for="include-inflation"
+                                class="text-sm font-medium text-gray-700 dark:text-gray-300">Include Inflation</label>
+                        </div>
+
+                        <!-- Calculate Button -->
+                        <button id="calculate-retirement"
+                            class="w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
+
+                        <!-- Output Fields -->
+                        <div id="retirement-results" class="mt-6 hidden">
+                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">Results</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Years to Retirement</div>
+                                <div id="years-to-retirement"
+                                    class="text-sm font-medium text-right text-gray-800 dark:text-white"></div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Savings Needed</div>
+                                <div id="savings-needed"
+                                    class="text-sm font-medium text-right text-gray-800 dark:text-white"></div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Monthly Savings Needed</div>
+                                <div id="monthly-savings-needed"
+                                    class="text-sm font-medium text-right text-gray-800 dark:text-white"></div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Progress to Goal (%)</div>
+                                <div id="progress-to-goal"
+                                    class="text-sm font-medium text-right text-gray-800 dark:text-white"></div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Retirement Date</div>
+                                <div id="retirement-date"
+                                    class="text-sm font-medium text-right text-gray-800 dark:text-white"></div>
+                                <div class="text-sm text-gray-600 dark:text-gray-300">Days Left</div>
+                                <div id="working-days-left"
+                                    class="text-sm font-medium text-right text-gray-800 dark:text-white"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
                 <!-- Lumpsum Calculator -->
                 <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
                     <div class="flex items-center mb-4">
@@ -482,73 +658,7 @@
                     </div>
                 </div>
 
-                <!-- Mutual Fund Returns Calculator -->
-                <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
-                    <div class="flex items-center mb-4">
-                        <div
-                            class="w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900 flex items-center justify-center mr-4">
-                            <i class="fas fa-chart-line text-yellow-600 dark:text-yellow-400"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">MF Returns Calculator</h3>
-                    </div>
-                    <p class="text-gray-600 dark:text-gray-300 mb-6">Calculate returns on your mutual fund investments
-                    </p>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Investment
-                                Amount (₹)</label>
-                            <input type="number"
-                                class="mf-amount w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                value="50000" min="1000">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Investment
-                                Period (years)</label>
-                            <input type="range" class="mf-period w-full" min="1" max="30" value="7">
-                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                <span>1</span>
-                                <span>30</span>
-                            </div>
-                            <div class="text-center mt-1">
-                                <span
-                                    class="mf-period-value text-primary-light dark:text-primary-dark font-medium">7</span>
-                                years
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Expected
-                                Return (% p.a.)</label>
-                            <input type="range" class="mf-return w-full" min="1" max="30" value="12">
-                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                <span>1</span>
-                                <span>30</span>
-                            </div>
-                            <div class="text-center mt-1">
-                                <span
-                                    class="mf-return-value text-primary-light dark:text-primary-dark font-medium">12</span>%
-                            </div>
-                        </div>
-                        <button
-                            class="mf-calculate w-full bg-primary-light dark:bg-primary-dark text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition">Calculate</button>
-                    </div>
-                    <div class="mf-results mt-6 hidden">
-                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                            <h4 class="font-medium text-gray-800 dark:text-white mb-2">MF Projection</h4>
-                            <div class="grid grid-cols-2 gap-2">
-                                <div class="text-sm text-gray-600 dark:text-gray-300">Invested Amount</div>
-                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white mf-invested">
-                                    ₹50,000</div>
-                                <div class="text-sm text-gray-600 dark:text-gray-300">Estimated Returns</div>
-                                <div class="text-sm font-medium text-right text-gray-800 dark:text-white mf-returns">
-                                    ₹55,241</div>
-                                <div class="text-sm text-gray-600 dark:text-gray-300">Total Value</div>
-                                <div
-                                    class="text-sm font-medium text-right text-primary-light dark:text-primary-dark mf-total">
-                                    ₹1,05,241</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
 
                 <!-- Sukanya Samriddhi Yojana Calculator -->
                 <div class="calculator-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
@@ -1152,6 +1262,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -1928,6 +2039,78 @@
 
             field.classList.remove('border-red-500');
         }
+
+        document.getElementById('calculate-retirement').addEventListener('click', function () {
+            const currentAge = parseInt(document.getElementById('current-age').value);
+            const retirementAge = parseInt(document.getElementById('retirement-age').value);
+            const longevityAge = parseInt(
+                document.getElementById('longevity-age').value
+            );
+            const currentSavings = parseFloat(document.getElementById('current-savings').value);
+            const monthlyContribution = parseFloat(document.getElementById('monthly-contribution').value);
+            const annualIncome = parseFloat(document.getElementById('annual-income').value);
+            const retirementIncomePercentage = parseFloat(document.getElementById('retirement-income-percentage').value);
+            const expectedReturn = parseFloat(document.getElementById('expected-return').value) / 100;
+            const inflationRate = parseFloat(document.getElementById('inflation-rate').value) / 100;
+            const includeInflation = document.getElementById('include-inflation').checked;
+
+            const yearsToRetirement = retirementAge - currentAge;
+            const yearsInRetirement = longevityAge - retirementAge;
+
+            if (yearsInRetirement <= 0) {
+                alert("Longevity age must be greater than retirement age.")
+                return;
+            }
+
+
+            const retirementDate = new Date();
+            retirementDate.setFullYear(
+                retirementDate.getFullYear() + yearsToRetirement
+            );
+
+            const workingDaysLeft = yearsToRetirement * 260;
+
+            // Calculate retirement income goal
+            let retirementIncome = annualIncome * (retirementIncomePercentage / 100);
+            if (includeInflation) {
+                retirementIncome *= Math.pow(1 + inflationRate, yearsToRetirement);
+            }
+
+            // Estimate savings needed
+            const savingsNeeded = retirementIncome * yearsInRetirement;
+
+            // Future value of current savings + monthly contributions
+            const months = yearsToRetirement * 12;
+            const monthlyReturn = expectedReturn / 12;
+            let futureSavings =
+                currentSavings * Math.pow(1 + monthlyReturn, months);
+            for (let i = 1; i <= months; i++) {
+                futureSavings +=
+                    monthlyContribution * Math.pow(1 + monthlyReturn, months - i);
+            }
+
+            const remainingNeeded = savingsNeeded - futureSavings;
+            const monthlyNeeded =
+                remainingNeeded > 0
+                    ? (remainingNeeded * monthlyReturn) /
+                    (Math.pow(1 + monthlyReturn, months) - 1)
+                    : 0;
+
+            // Display results
+            document.getElementById('years-to-retirement').textContent = yearsToRetirement;
+            document.getElementById('savings-needed').textContent = `${savingsNeeded
+                .toFixed(0)
+                .toLocaleString()}`;
+            document.getElementById('monthly-savings-needed').textContent = `${monthlyNeeded.toFixed(0)}`;
+            document.getElementById('progress-to-goal').textContent = `${Math.min(
+                (futureSavings / savingsNeeded) * 100,
+                100
+            ).toFixed(1)}%`;
+            document.getElementById('retirement-date').textContent = `${retirementDate.toLocaleDateString()}`;
+            document.getElementById('working-days-left').textContent = `${workingDaysLeft.toLocaleString()}`;
+
+            document.getElementById('retirement-results').classList.remove('hidden');
+        });
     </script>
 
 
